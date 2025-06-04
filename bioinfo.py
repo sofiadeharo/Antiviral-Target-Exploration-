@@ -31,13 +31,8 @@ df2
 len(df2.canonical_smiles.unique())
 df2_nr = df2.drop_duplicates(['canonical_smiles'])
 df2_nr
-# selection=['molecule_chembl_id','canonical_smiles','standard_value']
-# df3 = df2_nr[selection]
-# df3
-# df3.to_csv(r'C:\Users\Sofia\Downloads\acetylcholinesterase_02_bioactivity_data_preprocessed.csv', index=False)
-bioactivity_threshold = []
 
-# df4 = pd.read_csv('acetylcholinesterase_02_bioactivity_data_preprocessed.csv')
+bioactivity_threshold = []
 
 for i in df2.standard_value:
   if float(i) >= 10000:
@@ -66,7 +61,7 @@ data_tuples=list(zip(mol_cid,canonical_smiles,bioactivity_threshold,standard_val
 df3=pd.DataFrame(data_tuples,columns=['molecule_chembl_id','canonical_smiles','bioactivity_threshold','standard_value'])
 print(bioactivity_threshold)
 df3
-df3.to_csv(r'C:\Users\sofia\Downloads\bioactivity_preprocessed_data.csv', index=False)
+df3.to_csv(r'processed_data.csv', index=False)
 print(df3)
 
 df= pd.read_csv("bioactivity_data.csv")
@@ -74,9 +69,7 @@ df= pd.read_csv("bioactivity_data.csv")
 df['mol']=df['canonical_smiles'].apply(Chem.MolFromSmiles)
 
 
-img=Draw.MolsToGridImage(df['mol'].head(5).tolist(),molsPerRow=5,subImgSize=(300,300))
+img=Draw.MolsToGridImage(df['mol'].head(13).tolist(),molsPerRow=13,subImgSize=(300,300))
 img.show()
 img.save("output.png")
-svg = Draw.MolsToGridImage(['mol'], useSVG=True)
-with open("output.svg", "w") as f:
-    f.write(svg)
+
