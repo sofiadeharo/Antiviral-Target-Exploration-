@@ -2,6 +2,11 @@ import pandas as pd
 from chembl_webresource_client.new_client import new_client# Target search for coronavirus
 #This program takes in a database with a certain virus, in this case, coronavirus, and classifies its drugs, compounds and effectivity. Then stores the new database to a csv document as preprocessed data. 
 import json
+from rdkit import Chem
+from rdkit.Chem import Draw
+
+
+
 target = new_client.target
 target_query = target.search('coronavirus')
 targets = pd.DataFrame.from_dict(target_query)
@@ -63,3 +68,15 @@ print(bioactivity_threshold)
 df3
 df3.to_csv(r'C:\Users\sofia\Downloads\bioactivity_preprocessed_data.csv', index=False)
 print(df3)
+
+df= pd.read_csv("bioactivity_data.csv")
+
+df['mol']=df['canonical_smiles'].apply(Chem.MolFromSmiles)
+
+
+img=Draw.MolsToGridImage(df['mol'].head(5).tolist(),molsPerRow=5,subImgSize=(300,300))
+img.show()
+img.save("output.png")
+svg = Draw.MolsToGridImage(['mol'], useSVG=True)
+with open("output.svg", "w") as f:
+    f.write(svg)
