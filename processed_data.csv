@@ -1,13 +1,34 @@
-molecule_chembl_id,canonical_smiles,bioactivity_threshold,standard_value
-CHEMBL4763715,C[C@H]1O[C@@](O)(O[C@H]2CC[C@@]3(C)[C@@H](CC[C@]4(C)[C@@H]3C=CC3=C5CC(C)(C)CC[C@]5(CO)[C@H](O)C[C@]34C)[C@]2(C)CO)[C@H](O)[C@@H](O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)[C@H]1O,intermediate,1700.0
-CHEMBL5270175,O=C(NC(Cc1ccccc1)C(=O)N1CCC(O)(c2ccc(Br)cc2)CC1)c1ccccc1,active,700.0
-CHEMBL5283406,CC[C@H](C)[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CCC(=O)O)NC(=O)[C@H](CCC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CCSC)NC(=O)[C@H](CCC(=O)O)NC(=O)[C@H](Cc1ccc(O)cc1)NC(=O)[C@H](CCC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@@H](NC(=O)[C@@H](NC(=O)[C@H](CC(N)=O)NC(=O)[C@@H](NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@@H](N)CO)[C@@H](C)CC)C(C)C)[C@@H](C)O)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](CO)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@H](C(=O)N[C@@H](CC(=O)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](CC(C)C)C(=O)O)[C@@H](C)CC,intermediate,3350.0
-CHEMBL91704,CN1CCN(C(=O)N[C@@H](Cc2ccccc2)C(=O)N[C@H](/C=C/S(=O)(=O)c2ccccc2)CCc2ccccc2)CC1,active,1.48
-CHEMBL217092,CN1CCN(CCOc2cc(OC3CCOCC3)c3c(Nc4c(Cl)ccc5c4OCO5)ncnc3c2)CC1,intermediate,5100.0
-CHEMBL5278230,C=C(C=O)[C@H]1CC=C2[C@H](OC(=O)/C(C)=C/CCCCCCC)CC[C@H](C(=O)O)[C@@]2(C)C1,inactive,18100.0
-CHEMBL1230135,Cc1cc(C(=O)N[C@@H](C)C(=O)N[C@H](C(=O)N[C@@H](CC(C)C)C(=O)N[C@H](/C=C/C(=O)OCc2ccccc2)C[C@@H]2CCNC2=O)C(C)C)no1,active,140.0
-CHEMBL213054,CC(OC(C)(C)C)[C@H](NC(=O)OCc1ccccc1)C(=O)N[C@@H](CC1CCCCC1)C(=O)N[C@H](C=O)C[C@@H]1CCNC1=O,active,140.0
-CHEMBL4590273,Cc1cccc2nc(CSC(=S)NCc3cccnc3)cn12,intermediate,1340.0
-CHEMBL2365410,CC(C)C[C@H](NC(=O)OCc1ccccc1)C(=O)N[C@@H](CC1CCNC1=O)C(O)S(=O)(=O)O,active,40.0
-CHEMBL5182995,CC(C)(C)[C@H](NC(=O)C(F)(F)F)C(=O)N1C[C@H]2[C@@H]([C@H]1C(=O)N[C@@H](C[C@@H]1CCNC1=O)C(=O)CO)C2(C)C,active,13.0
-CHEMBL5185801,CC(C)(C)[C@H](NC(=O)C(F)(F)F)C(=O)N1C[C@H]2[C@@H]([C@H]1C(=O)N[C@@H](C[C@@H]1CCNC1=O)C(=O)c1nc3ccccc3s1)C2(C)C,active,24.0
+organism,molecule_chembl_id,canonical_smiles,bioactivity_threshold,standard_value
+Homo sapiens,CHEMBL4583184,Cc1cccc([N+](=O)[O-])c1-c1ccc(C=C2C(=O)N(c3ccccc3)C(=S)N(c3ccccc3)C2=O)o1,inactive,500000.0
+Homo sapiens,CHEMBL4637789,O=C(c1ccc(N2N=C(c3ccccc3)CC2c2cccc3ccccc23)cc1)N1CCOCC1,intermediate,1410.0
+Homo sapiens,CHEMBL4646262,Cc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3cccc4ccccc34)C2)cc1,intermediate,8750.0
+Homo sapiens,CHEMBL4638955,Cc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3cccc4ccccc34)C2)cc1C,inactive,14460.0
+Homo sapiens,CHEMBL4649571,CCc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3cccc4ccccc34)C2)cc1,inactive,22680.0
+Homo sapiens,CHEMBL4643182,COc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3cccc4ccccc34)C2)cc1,intermediate,7270.0
+Homo sapiens,CHEMBL4647408,CCOc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3cccc4ccccc34)C2)cc1,intermediate,9060.0
+Homo sapiens,CHEMBL4640669,O=C(c1ccc(N2N=C(c3ccc(F)cc3)CC2c2cccc3ccccc23)cc1)N1CCOCC1,active,180.0
+Homo sapiens,CHEMBL4647867,O=C(c1ccc(N2N=C(c3ccc(Br)cc3)CC2c2cccc3ccccc23)cc1)N1CCOCC1,intermediate,1370.0
+Homo sapiens,CHEMBL4646685,Cc1cccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3cccc4ccccc34)C2)c1,intermediate,5740.0
+Homo sapiens,CHEMBL4644650,O=C(c1ccc(N2N=C(c3cccc(Cl)c3)CC2c2cccc3ccccc23)cc1)N1CCOCC1,intermediate,1340.0
+Homo sapiens,CHEMBL4642657,O=C(c1ccc(N2N=C(c3cccc(Br)c3)CC2c2cccc3ccccc23)cc1)N1CCOCC1,intermediate,3580.0
+Homo sapiens,CHEMBL4632529,O=C(c1ccc(N2N=C(c3ccccc3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,intermediate,2460.0
+Homo sapiens,CHEMBL4649150,Cc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3ccc4ccccc4c3)C2)cc1,intermediate,9010.0
+Homo sapiens,CHEMBL4645013,Cc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3ccc4ccccc4c3)C2)cc1C,inactive,17550.0
+Homo sapiens,CHEMBL4641958,CCc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3ccc4ccccc4c3)C2)cc1,inactive,21860.0
+Homo sapiens,CHEMBL4641939,COc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3ccc4ccccc4c3)C2)cc1,inactive,13950.0
+Homo sapiens,CHEMBL4640305,CCOc1ccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3ccc4ccccc4c3)C2)cc1,inactive,19910.0
+Homo sapiens,CHEMBL4641941,O=C(c1ccc(N2N=C(c3ccc(F)cc3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,active,880.0
+Homo sapiens,CHEMBL4635945,O=C(c1ccc(N2N=C(c3ccc(Cl)cc3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,intermediate,1160.0
+Homo sapiens,CHEMBL4647287,O=C(c1ccc(N2N=C(c3ccc(Cl)c(Cl)c3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,intermediate,1930.0
+Homo sapiens,CHEMBL4647225,O=C(c1ccc(N2N=C(c3ccc(Br)cc3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,intermediate,2340.0
+Homo sapiens,CHEMBL4632800,Cc1cccc(C2=NN(c3ccc(C(=O)N4CCOCC4)cc3)C(c3ccc4ccccc4c3)C2)c1,intermediate,4350.0
+Homo sapiens,CHEMBL4646958,O=C(c1ccc(N2N=C(c3cccc(Cl)c3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,intermediate,4880.0
+Homo sapiens,CHEMBL4633176,O=C(c1ccc(N2N=C(c3cccc(Br)c3)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,intermediate,7800.0
+Homo sapiens,CHEMBL4646420,O=C(c1ccc(N2N=C(c3ccccc3Cl)CC2c2ccc3ccccc3c2)cc1)N1CCOCC1,inactive,15580.0
+Homo sapiens,CHEMBL4594271,N#Cc1cccc(C(NCC2CC2)c2ccc(F)c(NC(=O)c3cc(C(F)(F)F)nn3-c3cccc(CN)c3)c2)c1,inactive,30000.0
+Homo sapiens,CHEMBL5274458,CCC(C)[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CCC(=O)O)NC(=O)CNC(=O)CN)C(=O)O,inactive,134600.0
+Homo sapiens,CHEMBL5289275,CC(=O)N[C@@H](C)C(=O)NCC(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(=O)O)C(=O)O,intermediate,7970.0
+Homo sapiens,CHEMBL5289169,CC(=O)NCC(=O)NCC(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1c[nH]c2ccccc12)C(=O)O,inactive,10120.0
+Homo sapiens,CHEMBL5282293,CC(=O)NCC(=O)NCC(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(=O)O)C(=O)O,inactive,12160.0
+Homo sapiens,CHEMBL5280732,CC(C)C[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CCC(=O)O)NC(=O)CNC(=O)[C@H](C)NC(=O)OCc1ccccc1)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](CCC(=O)O)C(=O)O,intermediate,1090.0
+Homo sapiens,CHEMBL5288446,C[C@H](NC(=O)OCc1ccccc1)C(=O)NCC(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](C)C(=O)N[C@@H](CC1CCCC1)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](CCC(=O)O)C(=O)O,active,570.0
