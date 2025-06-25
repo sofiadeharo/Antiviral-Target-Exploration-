@@ -1,0 +1,138 @@
+import pandas as pd
+import datetime as dt 
+from chembl_webresource_client.new_client import new_client# Target search for coronavirus
+import json
+from rdkit import DataStructs
+from rdkit.DataStructs.cDataStructs import ExplicitBitVect
+from rdkit.Chem import AllChem
+from rdkit import Chem
+import pubchempy as pcp
+import sqlite3
+#from rdkit.Chem import MorganGenerator
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# Initialize the Morgan fingerprint generator
+from rdkit.Chem import Draw
+import numpy as np
+from rdkit.DataStructs import ConvertToNumpyArray
+
+
+target = new_client.target
+viral_targets = target.filter(target_type='SINGLE PROTEIN', organism='Influenza A virus')
+targets = pd.DataFrame(list(viral_targets))
+viral_targets_ids=[t['target_chembl_id'] for t in viral_targets]
+print(targets)
+
+print(targets[['target_chembl_id','pref_name','target_type']])
+
+molecule = new_client.molecule
+approved_molecules=molecule.filter(max_phase=4)
+approved_ids=set(m['molecule_chembl_id'] for m in approved_molecules)
+
+selected_target=targets.target_chembl_id.iloc[0]
+
+
+activity=new_client.activity
+all_viral_activities=[]
+for target_id in viral_targets_ids:
+    res = activity.filter(target_chembl_id=target_id, assay_type="B",standard_type="IC50", confidence_score_gte=7, stage=3).only(
+    ['molecule_chembl_id', 'canonical_smiles', 'standard_value', 'standard_units', 'activity_comment'])
+    for r in res:
+        # Only keep exact numeric values
+        if r.get('standard_relation') in [None, '=']:
+            try:
+                r['standard_value'] = float(r['standard_value'])
+                all_viral_activities.append(r)
+            except (ValueError, TypeError):
+                continue
+
+
+
+df = pd.DataFrame(all_viral_activities)
+print(df)
+
+df.to_csv('data.csv', index=False )
+
+
+df2 = df[df.standard_value.notna()]
+df2 = df2[df.canonical_smiles.notna()]
+df2
+len(df2.canonical_smiles.unique())
+df2_nr = df2.drop_duplicates(['canonical_smiles'])
+df2_nr
+selection= ['molecule_chembl_id', 'canonical_smiles','standard_value']
+df3=df2_nr[selection]
+df3.to_csv('bioactivity_data', index=False )
+
+
+df4=pd.read_csv('bioactivity_data.csv')
+
+
+bioactivity_threshold = []
+
+for i in df4.standard_value:
+  if float(i) >= 10000:
+    bioactivity_threshold.append("inactive")
+  elif float(i) <= 1000:
+    bioactivity_threshold.append("active")
+  else:
+    bioactivity_threshold.append("intermediate")
+mol_cid = []
+for i in df2.molecule_chembl_id:
+  mol_cid.append(i)
+
+mol_cid=[]
+for i in df2.molecule_chembl_id:
+  mol_cid.append(i)
+canonical_smiles=[]
+for i in df4.canonical_smiles:
+  canonical_smiles.append(i)
+
+standard_value=[]
+for i in df4.standard_value:
+  standard_value.append(i)
+  
+
+data_tuples=list(zip(mol_cid,canonical_smiles,bioactivity_threshold,standard_value))
+df5=pd.DataFrame(data_tuples,columns=['molecule_chembl_id','canonical_smiles','bioactivity_threshold','standard_value'])
+
+df5.to_csv(r'processed_data_new.csv', index=False)
+#From now on the processes must be done based on the clean dataset
+df= pd.read_csv("processed_data_new.csv")
+df_data=pd.DataFrame(df)
+bioactivity_order=['active','intermediate','inactive'] #rearranging the organisms from active to inactive 
+df['bioactivity_threshold']=pd.Categorical(df['bioactivity_threshold'], categories=bioactivity_order,ordered=True)
+df_sorted=df.sort_values(by='bioactivity_threshold')
+print("Sorted Dataset")
+print(df_sorted)
+
+active_df=df_sorted[df_sorted['bioactivity_threshold']=='active']
+#print(active_df)
+filtered_df=active_df[active_df['standard_value']<50.0]
+
+df_sorted_data = filtered_df.sort_values(by='standard_value', ascending=False)
+print("Filtered + Sorted Compounds")
+print(df_sorted_data)
+
+IC50_values=df_sorted_data['standard_value']
+print("Values")
+print(IC50_values)
+ic50_M=IC50_values/1e9
+df_sorted_data['PIC50']= -np.log10(ic50_M)
+print("IC50 + PIC50 Values")
+print(df_sorted_data)
+
+
+
+
+df = df_sorted_data.copy()
+df['mol']=df['canonical_smiles'].apply(Chem.MolFromSmiles)
+df = df[df['mol'].notna()]
+df['legend'] = df_sorted_data.apply(lambda row: f"{row['molecule_chembl_id']}\n{row['bioactivity_threshold'].capitalize()}| IC50:{row['standard_value']} µM", axis=1)
+img=Draw.MolsToGridImage(df['mol'].head(20).tolist(),subImgSize=(300,300), legends=df['legend'].head(20).tolist())
+img.show()
+img
+img.save("output.png")
