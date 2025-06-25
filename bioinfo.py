@@ -7,6 +7,7 @@ from rdkit.DataStructs.cDataStructs import ExplicitBitVect
 from rdkit.Chem import AllChem
 from rdkit import Chem
 import pubchempy as pcp
+import sqlite3
 #from rdkit.Chem import MorganGenerator
 
 from sklearn.model_selection import train_test_split
@@ -19,33 +20,40 @@ import numpy as np
 from rdkit.DataStructs import ConvertToNumpyArray
 
 
-
-#organism_name= input("Enter the name of the organism you would like to look for: ")
-
-#This searches for our target 
 target = new_client.target
-target_query = target.search("e-coli")
-targets = pd.DataFrame.from_dict(target_query)
-targets
-selected_target=targets.target_chembl_id[0]
-print(targets)
+viral_targets = target.filter(target_type='SINGLE PROTEIN').filter(organism__icontains='virus')
+targets = pd.DataFrame(list(viral_targets))
+print(targets[['target_chembl_id','pref_name','target_type']])
+
+molecule = new_client.molecule
+approved_molecules=molecule.filter(max_phase=4)
+approved_ids=set(m['molecule_chembl_id'] for m in approved_molecules)
+
+selected_target=targets.target_chembl_id.iloc[0]
 
 
 activity=new_client.activity
-res=activity.filter(target_chembl_id=selected_target).filter(standard_type="IC50", assay_type="B", confidence_score_gte=7).only(
-    ['molecule_chembl_id', 'canonical_smiles', 'standard_value', 'standard_units', 'activity_comment']
-)
-#selects the ic50 values only 
-#print(res)
+all_viral_activities=[]
+for target_id in viral_target_ids:
+    res = activity.filter(target_chembl_id=target_id, assay_type="B",standard_type="'IC50", confidence_score_gte=7).only(
+    ['molecule_chembl_id', 'canonical_smiles', 'standard_value', 'standard_units', 'activity_comment'])
 
-df = pd.DataFrame.from_dict(res)
-#df=df.merge(targets[['organism']],on='target_chembl_id', how='left')
-#'target_chembl_id'
-print(df)
+    for r in res:
+        if r.get('molecule_chembl_id') in approved_ids and r.get('standard_relation') in [None, '=']:
+            try:
+                r['standard_value'] = float(r['standard_value'])
+                all_viral_activities.append(r)
+            except:
+                continue
 
+df = pd.DataFrame(all_viral_activities)
+
+# Preview structure
+print(df.columns)
+print(df.head())
 
 df.to_csv('bioactivity_data.csv', index=False )
-print(df)
+
 
 df2 = df[df.standard_value.notna()]
 df2 = df2[df.canonical_smiles.notna()]
@@ -119,11 +127,11 @@ df['ECFP4']=df['canonical_smiles'].apply(lambda smiles:  AllChem.GetMorganFinger
 fingerprints = np.array([list(AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)) for mol in df['mol']], dtype=int)
 np.save("fingerprints.npy",fingerprints)
 df.to_csv(r'processed_data1.csv', index=False)
-print(type(df['ECFP4'].iloc[0]))
+#print(type(df['ECFP4'].iloc[0]))
 df=pd.read_csv("processed_data1.csv")
 df['ECFP4'] = df['ECFP4'].dropna().apply(lambda x: DataStructs.CreateFromBitString(str(x)))
-print(type(df['ECFP4'].iloc[0])) 
-print(df[['ECFP4']].head())
+#print(type(df['ECFP4'].iloc[0])) 
+#print(df[['ECFP4']].head())
 
 #Labeling Rdkit images 
 #smiles=df['canonical_smiles']
@@ -137,27 +145,27 @@ print(df[['ECFP4']].head())
 
 #Model Training 
 #Defining variables x and y 
-x = np.vstack(df['ECFP4'].tolist())
-y=df['PIC50']
-print(x.shape, y.shape)
+#x = np.vstack(df['ECFP4'].tolist())
+#y=df['PIC50']
+#print(x.shape, y.shape)
 
 
 #Testing variables 
-x_train, x_test, y_train, y_test=train_test_split(x,y, test_size=0.2,random_state=42)
-print("training set: ", x_train.shape, "Test set: ", x_test.shape)
+#x_train, x_test, y_train, y_test=train_test_split(x,y, test_size=0.2,random_state=42)
+#print("training set: ", x_train.shape, "Test set: ", x_test.shape)
 
 
 #Initializing model to test 
-model=RandomForestRegressor(n_estimators=100, random_state=42)
-model.fit(x_train, y_train)
-y_pred=model.predict(x_test)
+#model=RandomForestRegressor(n_estimators=100, random_state=42)
+#model.fit(x_train, y_train)
+#y_pred=model.predict(x_test)
 
 
 
 #Evaluating Performance: 
-print("MAE:", mean_absolute_error(y_test, y_pred))
-print("MSE:", mean_squared_error(y_test, y_pred))
-print("R² Score:", r2_score(y_test, y_pred))
+#print("MAE:", mean_absolute_error(y_test, y_pred))
+#print("MSE:", mean_squared_error(y_test, y_pred))
+#print("R² Score:", r2_score(y_test, y_pred))
 
 
 
