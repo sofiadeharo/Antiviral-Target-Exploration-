@@ -1,5 +1,4 @@
 import pandas as pd
-import antiviral_activity
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -25,13 +24,6 @@ df["IC50_M"] = df["IC50_M"].where(df["IC50_M"] > 0, np.nan)
 df["PIC50"] =  -np.log10(df["IC50_M"])
 df = df.dropna(subset=["PIC50"])
 df["PIC50"]= df["PIC50"].astype("float64")
-#Get Lipinski Descriptors 
-df['MolWt'] = df['mol'].apply(Descriptors.MolWt)
-df['LogP'] = df['mol'].apply(Descriptors.MolLogP)
-df['NumHDonors'] = df['mol'].apply(Descriptors.NumHDonors)
-df['NumHAcceptors'] = df['mol'].apply(Descriptors.NumHAcceptors)
-df['TPSA'] = df['mol'].apply(Descriptors.TPSA)
-df['NumRotatableBonds'] = df['mol'].apply(Descriptors.NumRotatableBonds)
 df.to_csv('data_to_read.csv', index=False)
 df=pd.read_csv("data_to_read.csv")
 #Model Training 
@@ -81,18 +73,11 @@ plt.grid(True)
 plt.savefig("pic50_plot.png", dpi=300,bbox_inches='tight')
 plt.close()
 
-
-st.title("Prediction Model with RandomForest")
+st.title("Antiviral Activity of compounds against Influenza A virus")
+st.write("The purpose of this application is to display several relationships between the antiviral activity of molecules that target influenza. The molecules are sorted by their activity (IC50) by their confidence score and stage of testing. " \
+"The molecules are filtered to only show a standard value less or equal to 50.0, then the molecules are converted to RDKIT molecules and ECFP4 fingerprints are generated. With this imformation one is capable of generating an image of the molecule based on the SMILES string, " \
+"and a legend that contains the name of the target protein, the activity threshold and the IC50 value. Additionally we are able to train a model that predicts the activity of the molecule based on the ECFP4 fingerprints. ")
+st.header("Prediction Model of Molecule fingerprints vs Bioactivity with RandomForest")
 st.image("pic50_plot.png", caption="The Model Calibration Plot")
 st.image("predicted_vs_actual.png", caption="Predicted vs. Actual pIC₅₀")
 
-#Predicting Bioactivity based on Lipinski Descriptors 
-descriptors=['MolWt',  'LogP', 'NumHDonors', 'NumHAcceptors', 'TPSA', 'NumRotatableBonds']
-corr_data=df [descriptors+['PIC50']]
-corr_matrix = corr_data.corr()
-plt.figure(figsize=(8, 6))
-sns.heatmap(corr_matrix[['PIC50']].drop('PIC50'), annot=True, cmap='coolwarm', fmt=".2f")
-plt.title('Correlation of Descriptors with pIC₅₀')
-plt.savefig("Correlation_plot.png", dpi=300,bbox_inches='tight')
-st.title("Correlation of Limpinski Descriptors with Bioactivity of a Molecule")
-st.image("Correlation_plot.png")

@@ -10,14 +10,18 @@ from rdkit.Chem import Descriptors
 import numpy as np
 from rdkit.DataStructs import ConvertToNumpyArray
 import streamlit as st 
+import prediction
 
 #Get target proteins for Influenza A virus 
 target = new_client.target
-viral_targets = target.filter(target_type='SINGLE PROTEIN', organism='Influenza A Virus')
+viral_targets = target.filter(target_type='SINGLE PROTEIN', organism='Influenza A virus')
 targets = pd.DataFrame(list(viral_targets))
 viral_targets_ids=[t['target_chembl_id'] for t in viral_targets]
 
-# Clean data, conserving only relevant targets such as conficence values above seven and stage three, meaning that they are tested compounds 
+
+activity=new_client.activity
+all_viral_activities=[]
+# # Clean data, conserving only relevant targets such as conficence values above seven and stage three, meaning that they are tested compounds 
 activity=new_client.activity
 all_viral_activities=[]
 for target_id in viral_targets_ids:
@@ -35,7 +39,7 @@ for target_id in viral_targets_ids:
                 continue
 df=pd.DataFrame(all_viral_activities)
 df.to_csv('all_viral_activities.csv', index=False)
-
+print(df)
 #Dropping null values 
 df2 = df[df.standard_value.notna()]
 df2 = df2[df.canonical_smiles.notna()]
@@ -110,13 +114,7 @@ compounds['mol'] = compounds['canonical_smiles'].apply(lambda smiles: Chem.MolFr
 compounds['ECFP4']=compounds['canonical_smiles'].apply(lambda smiles:  AllChem.GetMorganFingerprintAsBitVect(Chem.MolFromSmiles(smiles), radius=2, nBits=2048).ToBitString()) 
 fingerprints = np.array([list(AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)) for mol in compounds['mol']], dtype=int)
 np.save("fingerprints.npy",fingerprints)
-#Get Chemical Descriptors 
-compounds['MolWt'] = compounds['mol'].apply(Descriptors.MolWt)
-compounds['LogP'] = compounds['mol'].apply(Descriptors.MolLogP)
-compounds['NumHDonors'] = compounds['mol'].apply(Descriptors.NumHDonors)
-compounds['NumHAcceptors'] = compounds['mol'].apply(Descriptors.NumHAcceptors)
-compounds['TPSA'] = compounds['mol'].apply(Descriptors.TPSA)
-compounds['NumRotatableBonds'] = compounds['mol'].apply(Descriptors.NumRotatableBonds)
+
 
 compounds.to_csv(r'Data_fingerprints.csv', index=False)
 
@@ -129,11 +127,15 @@ df_data_to_display['mol']=df_data_to_display['canonical_smiles'].apply(Chem.MolF
 df_data_to_display[df_data_to_display['mol'].notna()]
 df_data_to_display['legend'] = df_data_to_display.apply(lambda row: f"{str(row['pref_name'])}\n{str(row['bioactivity_threshold']).capitalize()} | IC50:{row['standard_value']} µM", axis=1)
 
-
-st.title("Antiviral Compound Only Active Molecules")
+st.title("Antiviral Activity of compounds against Influenza A virus")
+st.write("The purpose of this application is to display several relationships between the antiviral activity of molecules that target influenza. The molecules are sorted by their activity (IC50) by their confidence score and stage of testing. " \
+"The molecules are filtered to only show a standard value less or equal to 50.0, then the molecules are converted to RDKIT molecules and ECFP4 fingerprints are generated. With this imformation one is capable of generating an image of the molecule based on the SMILES string, " \
+"and a legend that contains the name of the target protein, the activity threshold and the IC50 value. Additionally we are able to train a model that predicts the activity of the molecule based on the ECFP4 fingerprints. ")
+st.header("Antiviral Compound Only Active Molecules")
 num_to_display=st.slider("Number of Molecules to display", 5,30,10)
 
 img=Draw.MolsToGridImage(df_data_to_display['mol'].head(num_to_display).tolist(),subImgSize=(300,300), legends=df_data_to_display['legend'].head(num_to_display).tolist())
 st.image(img)
-st.title("Active Molecules")
+st.header("Active Molecules")
 st.dataframe(df_data_to_display)
+
