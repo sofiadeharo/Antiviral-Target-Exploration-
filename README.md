@@ -40,5 +40,9 @@ Evaluated performance with R² score, MAE, and visual regression plots.
 ### Visualization
 
 Rendered molecule depictions to inspect structural diversity.
+<img width="1200" height="197" alt="image" src="https://github.com/user-attachments/assets/0be47bc6-9593-4eb4-ae89-d793df337e2a" />
 
 Created Actual vs Predicted pIC₅₀ plots to assess model fit.
+<img width="2067" height="2068" alt="image" src="https://github.com/user-attachments/assets/6b9dca91-b85d-4724-907c-f80a43de5a16" />
+
+
